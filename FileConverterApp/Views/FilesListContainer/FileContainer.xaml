@@ -1,0 +1,71 @@
+﻿<UserControl
+    x:Class="FileConverterApp.Views.FilesListContainer.FileContainer"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:FileConverterApp.Views.FilesListContainer"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignWidth="400"
+    mc:Ignorable="d">
+    <Grid Margin="5" Background="AliceBlue">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid
+            Grid.Row="0"
+            Height="Auto"
+            Background="Honeydew">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid
+                Width="50"
+                Height="50"
+                Margin="5"
+                Background="Red">
+                <Image x:Name="ImagePreview" />
+            </Grid>
+            <StackPanel Grid.Column="1" Margin="0,5,0,5">
+                <TextBlock x:Name="FileNameText">
+                    Name: Test
+                </TextBlock>
+                <TextBlock x:Name="FileFormatText">
+                    Format: .png
+                </TextBlock>
+            </StackPanel>
+            <ComboBox
+                x:Name="FormatSelectionCombobox"
+                Grid.Column="2"
+                Height="25"
+                Margin="10"
+                SelectionChanged="OnFormatSelectionCombobox_SelectionChanged" />
+            <Button
+                x:Name="DeleteFileButton"
+                Grid.Column="3"
+                Width="20"
+                Height="20"
+                Margin="10,0,10,0"
+                Click="OnDeleteFileButton_Clicked">
+                X
+            </Button>
+        </Grid>
+
+        <Separator
+            Grid.Row="1"
+            Height="2"
+            Margin="0" />
+        <TextBlock
+            x:Name="StatusText"
+            Grid.Row="2"
+            Height="Auto"
+            MaxHeight="50"
+            Margin="5"
+            Text="Status: Processing"
+            TextWrapping="Wrap" />
+    </Grid>
+</UserControl>
