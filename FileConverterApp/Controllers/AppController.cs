@@ -1,5 +1,6 @@
 ﻿using FileConverterApp.Models;
 using FileConverterApp.StateManagement;
+using FileConverterApp.Utils;
 using FileConverterCore;
 using System.IO;
 
@@ -41,6 +42,11 @@ namespace FileConverterApp.Controllers
 				ChangeFileDataModelStatus(file_data_model, args.ConvertionStatus, args.Message);
 				ReevaluateCanConvert();
 			});
+		}
+
+		public static void SetSelectedGlobalFormat(string format)
+		{
+			selected_global_format.SetValue(format);
 		}
 
 		private static void ChangeFileDataModelStatus(FileDataModel file_data_model, EConvertionStatus convertion_status, string? message)
@@ -136,7 +142,7 @@ namespace FileConverterApp.Controllers
 			file_data_models_list_clone.Remove(file_data_model);
 			file_data_models_list.SetValue(file_data_models_list_clone);
 			//TODO better removing from the convertion queue
-			convertion_queue.RemoveAt((convertion_queue.FindIndex(match => match.FilePath == file_data_model.Path)));
+			ListTools.TryRemoveWithPredicate(convertion_queue, (match => match.FilePath == file_data_model.Path));
 			OnFileDataModelsListChanged();
 		}
 
@@ -147,7 +153,7 @@ namespace FileConverterApp.Controllers
 			{
 				if (!CanRemove(file_data_model)) continue;
 				file_data_models_clone.Remove(file_data_model);
-				convertion_queue.RemoveAt(convertion_queue.FindIndex(match => match.FilePath == file_data_model.Path));
+				ListTools.TryRemoveWithPredicate(convertion_queue, (match => match.FilePath == file_data_model.Path));
 			}
 
 			file_data_models_list.SetValue(file_data_models_clone);

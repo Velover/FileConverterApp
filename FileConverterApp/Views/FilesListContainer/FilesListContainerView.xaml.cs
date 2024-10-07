@@ -39,7 +39,7 @@ namespace FileConverterApp.Views
 			foreach (var file_data_model in args.Value)
 			{
 				FileContainer file_container;
-				var success = file_containers_dictionary_.TryGetValue(file_data_model, out file_container);
+				var success = file_containers_dictionary_.TryGetValue(file_data_model, out file_container!);
 				if (!success)
 				{
 					file_container = CreateFileContainerForFileDataModel(file_data_model);

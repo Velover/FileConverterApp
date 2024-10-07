@@ -60,5 +60,10 @@ namespace FileConverterApp
 		{
 			AppController.StartConvertion();
 		}
+
+		private void GlobalFormatComboBox_OnSelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+		{
+			AppController.SetSelectedGlobalFormat((string)GlobalFormatComboBox.SelectedItem ?? "");
+		}
 	}
 }
