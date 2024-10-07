@@ -1,14 +1,15 @@
-﻿using FileConverterApp.Controllers;
+﻿using System.Windows.Controls;
+using FileConverterApp.Controllers;
 using FileConverterApp.Models;
 using FileConverterApp.StateManagement;
 using FileConverterApp.Views.FilesListContainer;
-using System.Windows.Controls;
 
 namespace FileConverterApp.Views
 {
 	public partial class FilesListContainerView : UserControl
 	{
 		Dictionary<FileDataModel, FileContainer> file_containers_dictionary_ = new();
+
 		public FilesListContainerView()
 		{
 			InitializeComponent();
@@ -21,8 +22,12 @@ namespace FileConverterApp.Views
 
 		private void OnFileDataModelStatusChanged(FileDataModel file_data_model)
 		{
-			var success = file_containers_dictionary_.TryGetValue(file_data_model, out var file_container);
-			if (!success) return;
+			var success = file_containers_dictionary_.TryGetValue(
+				file_data_model,
+				out var file_container
+			);
+			if (!success)
+				return;
 			file_container!.OnFileDataModelStatusUpdated();
 		}
 
@@ -33,7 +38,10 @@ namespace FileConverterApp.Views
 			return file_container;
 		}
 
-		private void OnFileDataModelsListChnaged(object sender, ValueChangedEventArgs<List<FileDataModel>> args)
+		private void OnFileDataModelsListChnaged(
+			object sender,
+			ValueChangedEventArgs<List<FileDataModel>> args
+		)
 		{
 			FilesHolder.Children.Clear();
 			foreach (var file_data_model in args.Value)
@@ -46,7 +54,6 @@ namespace FileConverterApp.Views
 				}
 				FilesHolder.Children.Add(file_container);
 			}
-
 		}
 	}
 }

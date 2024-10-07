@@ -1,8 +1,8 @@
-﻿using ImageMagick;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Media.Imaging;
+using ImageMagick;
 
 namespace ConverterUI.Utils
 {
@@ -27,7 +27,8 @@ namespace ConverterUI.Utils
 		public static BitmapImage GetFileIcon(string file_path)
 		{
 			var icon = Icon.ExtractAssociatedIcon(file_path);
-			if (icon is null) return new BitmapImage();
+			if (icon is null)
+				return new BitmapImage();
 
 			var bitmap = icon.ToBitmap();
 			return BitmapToBitmapImage(bitmap);

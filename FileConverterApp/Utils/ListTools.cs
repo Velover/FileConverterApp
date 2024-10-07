@@ -5,13 +5,17 @@
 		public static void TryRemoveValue<T>(List<T> list, T value)
 		{
 			var index = list.IndexOf(value);
-			if (index == -1) return;
+			if (index == -1)
+				return;
 			list.RemoveAt(index);
 		}
+
 		public static void TryRemoveAt<T>(List<T> list, int index)
 		{
-			if (index < 0) return;
-			if (index >= list.Count) return;
+			if (index < 0)
+				return;
+			if (index >= list.Count)
+				return;
 			list.RemoveAt(index);
 		}
 

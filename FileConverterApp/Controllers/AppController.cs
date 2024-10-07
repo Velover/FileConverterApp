@@ -1,8 +1,8 @@
-﻿using FileConverterApp.Models;
+﻿using System.IO;
+using FileConverterApp.Models;
 using FileConverterApp.StateManagement;
 using FileConverterApp.Utils;
 using FileConverterCore;
-using System.IO;
 
 namespace FileConverterApp.Controllers
 {
@@ -25,9 +25,11 @@ namespace FileConverterApp.Controllers
 		public static event OnFileDataModelStatusChangedEventHandler OnFileDataModelStatusChanged;
 
 		private static bool init_ = false;
+
 		public static void LazyInit()
 		{
-			if (init_) return;
+			if (init_)
+				return;
 			init_ = true;
 
 			FileConverter.OnFileStatusChanged += OnFileStatusChanged;
@@ -35,8 +37,11 @@ namespace FileConverterApp.Controllers
 
 		private static void OnFileStatusChanged(object sender, FileStatusEventArgs args)
 		{
-			var file_data_model = file_data_models_list.GetValue().Find(file_data_model => file_data_model.Path == args.FilePath);
-			if (file_data_model is null) return;
+			var file_data_model = file_data_models_list
+				.GetValue()
+				.Find(file_data_model => file_data_model.Path == args.FilePath);
+			if (file_data_model is null)
+				return;
 			App.Current.Dispatcher.Invoke(() =>
 			{
 				ChangeFileDataModelStatus(file_data_model, args.ConvertionStatus, args.Message);
@@ -49,7 +54,11 @@ namespace FileConverterApp.Controllers
 			selected_global_format.SetValue(format);
 		}
 
-		private static void ChangeFileDataModelStatus(FileDataModel file_data_model, EConvertionStatus convertion_status, string? message)
+		private static void ChangeFileDataModelStatus(
+			FileDataModel file_data_model,
+			EConvertionStatus convertion_status,
+			string? message
+		)
 		{
 			file_data_model.ConvertionStatus = convertion_status;
 			file_data_model.ConvertionMessage = message;
@@ -73,15 +82,21 @@ namespace FileConverterApp.Controllers
 				return;
 			}
 
-			available_global_formats.SetValue(FileConverter.GetSupportedFormatsForFileType(global_file_type.GetValue()));
-			selected_global_format.SetValue(available_global_formats.GetValue().FirstOrDefault(string.Empty));
+			available_global_formats.SetValue(
+				FileConverter.GetSupportedFormatsForFileType(global_file_type.GetValue())
+			);
+			selected_global_format.SetValue(
+				available_global_formats.GetValue().FirstOrDefault(string.Empty)
+			);
 		}
 
 		private static void ReevaluateCanConvert()
 		{
 			can_convert.SetValue(
-				files_exist.GetValue() &&
-				file_data_models_list.GetValue().Exists(file_data_model => file_data_model.ConvertionStatus == EConvertionStatus.None)
+				files_exist.GetValue()
+					&& file_data_models_list
+						.GetValue()
+						.Exists(file_data_model => file_data_model.ConvertionStatus == EConvertionStatus.None)
 			);
 		}
 
@@ -108,21 +123,24 @@ namespace FileConverterApp.Controllers
 			files = files
 				.ToHashSet()
 				.ToArray()
-				.Where(file_path => !files_data_models.Exists(file_data_model => file_data_model.Path == file_path))
+				.Where(file_path =>
+					!files_data_models.Exists(file_data_model => file_data_model.Path == file_path)
+				)
 				.ToArray();
-
-
 
 			if (global_file_type.GetValue() == EFileType.None)
 			{
 				var file_type = FileConverter.GetFileTypeFromFiles(files);
-				if (file_type == EFileType.None) return;
+				if (file_type == EFileType.None)
+					return;
 				global_file_type.SetValue(file_type);
 				OnGlobalFileTypeChanged();
 			}
 
 			var filtered_files = FileConverter.FilterFilesByType(files, global_file_type.GetValue());
-			var file_data_models = filtered_files.Select(file_path => ConvertFileToFileDataModel(file_path)).ToArray();
+			var file_data_models = filtered_files
+				.Select(file_path => ConvertFileToFileDataModel(file_path))
+				.ToArray();
 
 			var file_data_models_list_clone = file_data_models_list.GetValue().ToList();
 			file_data_models_list_clone.AddRange(file_data_models);
@@ -137,12 +155,16 @@ namespace FileConverterApp.Controllers
 
 		public static void RemoveFileDataModel(FileDataModel file_data_model)
 		{
-			if (!CanRemove(file_data_model)) return;
+			if (!CanRemove(file_data_model))
+				return;
 			var file_data_models_list_clone = file_data_models_list.GetValue().ToList();
 			file_data_models_list_clone.Remove(file_data_model);
 			file_data_models_list.SetValue(file_data_models_list_clone);
 			//TODO better removing from the convertion queue
-			ListTools.TryRemoveWithPredicate(convertion_queue, (match => match.FilePath == file_data_model.Path));
+			ListTools.TryRemoveWithPredicate(
+				convertion_queue,
+				(match => match.FilePath == file_data_model.Path)
+			);
 			OnFileDataModelsListChanged();
 		}
 
@@ -151,9 +173,13 @@ namespace FileConverterApp.Controllers
 			var file_data_models_clone = file_data_models_list.GetValue();
 			foreach (var file_data_model in file_data_models_clone)
 			{
-				if (!CanRemove(file_data_model)) continue;
+				if (!CanRemove(file_data_model))
+					continue;
 				file_data_models_clone.Remove(file_data_model);
-				ListTools.TryRemoveWithPredicate(convertion_queue, (match => match.FilePath == file_data_model.Path));
+				ListTools.TryRemoveWithPredicate(
+					convertion_queue,
+					(match => match.FilePath == file_data_model.Path)
+				);
 			}
 
 			file_data_models_list.SetValue(file_data_models_clone);
@@ -169,8 +195,12 @@ namespace FileConverterApp.Controllers
 		{
 			var raw_name = Path.GetFileNameWithoutExtension(file_path) ?? "";
 			var format = Path.GetExtension(file_path) ?? "";
-			var supported_write_formats = FileConverter.GetSupportedFormatsForFileType(global_file_type.GetValue());
-			var available_formats = (new string[] { USE_GLOBAL_FORMAT }).Concat(supported_write_formats).ToArray();
+			var supported_write_formats = FileConverter.GetSupportedFormatsForFileType(
+				global_file_type.GetValue()
+			);
+			var available_formats = (new string[] { USE_GLOBAL_FORMAT })
+				.Concat(supported_write_formats)
+				.ToArray();
 
 			return new FileDataModel()
 			{
@@ -185,15 +215,25 @@ namespace FileConverterApp.Controllers
 
 		public static void StartConvertion()
 		{
-
 			//Could be reworked :D
-			if (!files_exist.GetValue()) return;
-			if (is_converting.GetValue()) return;
+			if (!files_exist.GetValue())
+				return;
+			if (is_converting.GetValue())
+				return;
 			is_converting.SetValue(true);
 			foreach (var file_data_model in file_data_models_list.GetValue())
 			{
-				var selected_format = file_data_model.SelectedFormat == USE_GLOBAL_FORMAT ? selected_global_format.GetValue() : file_data_model.SelectedFormat;
-				convertion_queue.Add(ConvertFileDataModelToConvertionDataModel(file_data_model, selected_format, global_file_type.GetValue()));
+				var selected_format =
+					file_data_model.SelectedFormat == USE_GLOBAL_FORMAT
+						? selected_global_format.GetValue()
+						: file_data_model.SelectedFormat;
+				convertion_queue.Add(
+					ConvertFileDataModelToConvertionDataModel(
+						file_data_model,
+						selected_format,
+						global_file_type.GetValue()
+					)
+				);
 				ChangeFileDataModelStatus(file_data_model, EConvertionStatus.Starting, null);
 			}
 
@@ -203,7 +243,11 @@ namespace FileConverterApp.Controllers
 				{
 					var convertion_data_model = convertion_queue[0];
 					convertion_queue.RemoveAt(0);
-					FileConverter.ConvertFileToFormat(convertion_data_model.FilePath, convertion_data_model.FileType, convertion_data_model.ToFormat);
+					FileConverter.ConvertFileToFormat(
+						convertion_data_model.FilePath,
+						convertion_data_model.FileType,
+						convertion_data_model.ToFormat
+					);
 				}
 				App.Current.Dispatcher.Invoke(() =>
 				{
@@ -212,13 +256,17 @@ namespace FileConverterApp.Controllers
 			});
 		}
 
-		private static ConvertionDataModel ConvertFileDataModelToConvertionDataModel(FileDataModel file_data_model, string format, EFileType file_type)
+		private static ConvertionDataModel ConvertFileDataModelToConvertionDataModel(
+			FileDataModel file_data_model,
+			string format,
+			EFileType file_type
+		)
 		{
 			return new ConvertionDataModel()
 			{
 				FilePath = file_data_model.Path,
 				ToFormat = format,
-				FileType = file_type
+				FileType = file_type,
 			};
 		}
 	}

@@ -37,7 +37,7 @@
                 x:Name="GlobalFormatComboBox"
                 Height="30"
                 Margin="281,10,42,10"
-							SelectionChanged="GlobalFormatComboBox_OnSelectionChanged"/>
+                SelectionChanged="GlobalFormatComboBox_OnSelectionChanged" />
         </Grid>
     </Grid>
 </Window>

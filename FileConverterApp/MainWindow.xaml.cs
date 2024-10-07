@@ -1,7 +1,7 @@
-﻿using FileConverterApp.Controllers;
+﻿using System.Windows;
+using FileConverterApp.Controllers;
 using FileConverterApp.StateManagement;
 using FileConverterApp.Views;
-using System.Windows;
 
 namespace FileConverterApp
 {
@@ -27,7 +27,10 @@ namespace FileConverterApp
 			FilesListContainerHolder.Children.Add(files_list_container);
 		}
 
-		private void OnAvailableGlobalFormatsChanged(object sender, ValueChangedEventArgs<string[]> args)
+		private void OnAvailableGlobalFormatsChanged(
+			object sender,
+			ValueChangedEventArgs<string[]> args
+		)
 		{
 			GlobalFormatComboBox.Items.Clear();
 			foreach (var available_format in args.Value)
@@ -61,7 +64,10 @@ namespace FileConverterApp
 			AppController.StartConvertion();
 		}
 
-		private void GlobalFormatComboBox_OnSelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+		private void GlobalFormatComboBox_OnSelectionChanged(
+			object sender,
+			System.Windows.Controls.SelectionChangedEventArgs e
+		)
 		{
 			AppController.SetSelectedGlobalFormat((string)GlobalFormatComboBox.SelectedItem ?? "");
 		}
