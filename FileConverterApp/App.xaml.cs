@@ -7,7 +7,10 @@ namespace FileConverterApp
 	{
 		private void OnAppStartUp(object sender, StartupEventArgs args)
 		{
-			string[] test_args = [@"C:\Users\cobau\Desktop\Resources\Images\2x2Image.png"];
+			string[] test_args = [
+				@"C:\Users\cobau\Desktop\Resources\Images\2x2Image.png",
+				@"C:\Users\ymazurenko\Desktop\Resources\Images\Single\BambooForest.png"
+			];
 
 			AppController.LazyInit();
 			AppController.AddFiles(args.Args.Length == 0 ? test_args : args.Args);

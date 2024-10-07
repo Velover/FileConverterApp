@@ -48,8 +48,7 @@ namespace FileConverterApp.Controllers
 			file_data_model.ConvertionStatus = convertion_status;
 			file_data_model.ConvertionMessage = message;
 
-			if (OnFileDataModelStatusChanged is not null)
-				OnFileDataModelStatusChanged(file_data_model);
+			OnFileDataModelStatusChanged?.Invoke(file_data_model);
 		}
 
 		private static void ClearFileDataModelConvertStatus(FileDataModel file_data_model)
@@ -191,6 +190,7 @@ namespace FileConverterApp.Controllers
 				convertion_queue.Add(ConvertFileDataModelToConvertionDataModel(file_data_model, selected_format, global_file_type.GetValue()));
 				ChangeFileDataModelStatus(file_data_model, EConvertionStatus.Starting, null);
 			}
+
 			Task.Run(() =>
 			{
 				while (convertion_queue.Count > 0)

@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" Version="9.0.0-rc.1.24451.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\FileConverterCore\FileConverterCore.csproj" />
   </ItemGroup>
 

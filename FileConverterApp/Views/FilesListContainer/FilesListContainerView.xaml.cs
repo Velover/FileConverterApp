@@ -15,6 +15,15 @@ namespace FileConverterApp.Views
 
 			AppController.file_data_models_list.OnChanged += OnFileDataModelsListChnaged;
 			AppController.file_data_models_list.TriggerFor(OnFileDataModelsListChnaged);
+
+			AppController.OnFileDataModelStatusChanged += OnFileDataModelStatusChanged;
+		}
+
+		private void OnFileDataModelStatusChanged(FileDataModel file_data_model)
+		{
+			var success = file_containers_dictionary_.TryGetValue(file_data_model, out var file_container);
+			if (!success) return;
+			file_container!.OnFileDataModelStatusUpdated();
 		}
 
 		private FileContainer CreateFileContainerForFileDataModel(FileDataModel file_data_model)

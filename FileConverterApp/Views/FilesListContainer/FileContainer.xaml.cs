@@ -1,4 +1,5 @@
-﻿using FileConverterApp.Controllers;
+﻿using ConverterUI.Utils;
+using FileConverterApp.Controllers;
 using FileConverterApp.Models;
 using FileConverterCore;
 using System.Windows.Controls;
@@ -17,12 +18,20 @@ namespace FileConverterApp.Views.FilesListContainer
 
 			OnFileDataModelStatusUpdated();
 
+			FillFormatsComboBox();
+			FileImagePreview.Source = FileIconExtractor.GetFileIcon(file_data_model.Path);
+		}
+
+		private void FillFormatsComboBox()
+		{
+			//justin case
 			FormatSelectionCombobox.Items.Clear();
-			foreach (var available_format in file_data_model.AvailableFormats)
+
+			foreach (var available_format in file_data_model_.AvailableFormats)
 			{
 				FormatSelectionCombobox.Items.Add(available_format);
 			}
-			FormatSelectionCombobox.SelectedIndex = FormatSelectionCombobox.Items.IndexOf(file_data_model.SelectedFormat);
+			FormatSelectionCombobox.SelectedIndex = FormatSelectionCombobox.Items.IndexOf(file_data_model_.SelectedFormat);
 		}
 
 		public void OnFileDataModelStatusUpdated()
